@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tv1" type="id"/>
+    <item name="tv2" type="id"/>
+    <item name="tv3" type="id"/>
+    <item name="tv4" type="id"/>
+    <item name="tv5" type="id"/>
+    <item name="tv6" type="id"/>
+    <item name="tv7" type="id"/>
+    <item name="tv8" type="id"/>
+    <item name="tv9" type="id"/>
+    <item name="tv10" type="id"/>
+    <item name="iv1" type="id"/>
+    <item name="iv2" type="id"/>
+    <item name="et1" type="id"/>
+    <item name="cb1" type="id"/>
+    <item name="ll1" type="id"/>
+    <item name="ll2" type="id"/>
+</resources>
