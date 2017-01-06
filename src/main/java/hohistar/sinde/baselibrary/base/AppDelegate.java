@@ -25,16 +25,17 @@ public class AppDelegate extends Application {
     private static Context mInstance = null;
     public static String TAG = "AppDelegate";
     public static String PATH_CACHE;
+    public static String PATH_MIAN;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
         TAG = getClass().getSimpleName();
-        PATH_CACHE = Environment.getExternalStorageDirectory()+"/"+getApplicationInfo().packageName;
+        PATH_MIAN = Environment.getExternalStorageDirectory()+"/"+getApplicationInfo().packageName;
+        PATH_CACHE = PATH_MIAN+"/cache";
         Utility_File.createFiles(PATH_CACHE);
-//        String path = SysApplication.PATH_MAIN;
-//        CrashHandler.getInstance().init(this,path);
+        CrashHandler.getInstance().init(this,PATH_MIAN);
     }
 
     public static Context getInstance(){
