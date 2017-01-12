@@ -32,12 +32,17 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import java.io.File;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import hohistar.sinde.baselibrary.R;
+import hohistar.sinde.baselibrary.utility.Parameter;
+import hohistar.sinde.baselibrary.utility.PerformAfterOnCreate;
 import hohistar.sinde.baselibrary.utility.Utility;
 import hohistar.sinde.baselibrary.utility.Utility_File;
 
@@ -128,9 +133,14 @@ public class BaseActivity extends Activity {
 
     protected void setContentViewBefore(View view){}
 
+    private boolean INIT = false;
     @Override
     protected void onResume() {
         super.onResume();
+        if (!INIT){
+            INIT = true;
+            performInitMethodIfNeed();
+        }
         mIsStop = false;
         mIsActivityPause = false;
     }
@@ -144,6 +154,44 @@ public class BaseActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void performInitMethodIfNeed(){
+        Method[] methods = getClass().getDeclaredMethods();
+        if (methods != null && methods.length>0){
+            for (Method m:methods){
+                if (m.isAnnotationPresent(PerformAfterOnCreate.class)){
+                    Annotation[][] parameters = m.getParameterAnnotations();
+                    List<String> ps = new ArrayList<>();
+                    for (Annotation[] annotations: parameters){
+                       for (Annotation animation:annotations){
+                            if (animation.annotationType().equals(Parameter.class)){
+                                Parameter p = (Parameter)animation;
+                                if (p.values().length>0){
+                                    ps.add(p.values()[0]);
+                                }else {
+                                    ps.add("");
+                                }
+                            }
+                       }
+                    }
+                    m.setAccessible(true);
+                    int l = m.getParameterTypes().length;
+                    try {
+                        if (l==0)m.invoke(this);
+                        else if (l==1)m.invoke(this,ps.get(0));
+                        else if (l==2)m.invoke(this,ps.get(0),ps.get(1));
+                        else if (l==3)m.invoke(this,ps.get(0),ps.get(1),ps.get(2));
+                        else if (l==4)m.invoke(this,ps.get(0),ps.get(1),ps.get(2),ps.get(3));
+                        else if (l==5)m.invoke(this,ps.get(0),ps.get(1),ps.get(2),ps.get(3),ps.get(4));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -25,17 +25,17 @@ public class AppDelegate extends Application {
     private static Context mInstance = null;
     public static String TAG = "AppDelegate";
     public static String PATH_CACHE;
-    public static String PATH_MIAN;
+    public static String PATH_MAIN;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
         TAG = getClass().getSimpleName();
-        PATH_MIAN = Environment.getExternalStorageDirectory()+"/"+getApplicationInfo().packageName;
-        PATH_CACHE = PATH_MIAN+"/cache";
+        PATH_MAIN = Environment.getExternalStorageDirectory()+"/"+getApplicationInfo().packageName;
+        PATH_CACHE = PATH_MAIN+"/cache";
         Utility_File.createFiles(PATH_CACHE);
-        CrashHandler.getInstance().init(this,PATH_MIAN);
+        CrashHandler.getInstance().init(this,PATH_MAIN);
     }
 
     public static Context getInstance(){
@@ -70,24 +70,6 @@ public class AppDelegate extends Application {
         }
     }
 
-    public static boolean mKeyBoardShowing = false;
-    public static void initKeyBoardState(final ViewGroup group) {
-        group.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                    @Override
-                    public void onGlobalLayout() {
-                        // TODO Auto-generated method stub
-                        int heightDiff = group.getRootView().getHeight()
-                                - group.getHeight();
-                        // if more than 100 pixels, its probably a keyboard...
-                        // keyboard is visible, do something here
-// keyboard is not visible, do something here
-                        mKeyBoardShowing = heightDiff > 130;
-                    }
-                });
-    }
-
     public boolean isAppOnForeground() {
         // Returns a list of application processes that are running on the
         // device
@@ -109,4 +91,9 @@ public class AppDelegate extends Application {
         return false;
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+    }
 }
